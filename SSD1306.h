@@ -77,11 +77,9 @@
 
 class SSD1306 {
  public:
-  SSD1306(int8_t SID, int8_t SCLK, int8_t DC, int8_t RST, int8_t CS) :sid(SID), sclk(SCLK), dc(DC), rst(RST), cs(CS) {}
-  SSD1306(int8_t SID, int8_t SCLK, int8_t DC, int8_t RST) :sid(SID), sclk(SCLK), dc(DC), rst(RST), cs(-1) {}
+  SSD1306(int8_t DC, int8_t RST) :dc(DC), rst(RST) {}
 
 
-  void set_gpio(int num, char* c);
   void ssd1306_init(uint8_t switchvcc);
   void ssd1306_command(uint8_t c);
   void ssd1306_data(uint8_t c);
@@ -110,7 +108,7 @@ class SSD1306 {
 		  uint8_t color);
 
  private:
-  int8_t sid, sclk, dc, rst, cs;
+  int8_t dc, rst;
   void spiwrite(uint8_t c);
 
   //uint8_t buffer[128*64/8]; 

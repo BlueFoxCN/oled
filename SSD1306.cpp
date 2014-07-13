@@ -12,6 +12,7 @@
 #include <fcntl.h>
 
 #include "SSD1306.h"
+#include "gpio-operation.h"
 #include "font.h"
 
 using namespace std;
@@ -280,24 +281,24 @@ void SSD1306::setpixel(uint8_t x, uint8_t y, uint8_t color) {
 
 void SSD1306::ssd1306_init(uint8_t vccstate) {
   // set pin directions
-  // pinMode(sid, OUTPUT);
-  // pinMode(sclk, OUTPUT);
-  // pinMode(dc, OUTPUT);
-  // pinMode(rst, OUTPUT);
-  // pinMode(cs, OUTPUT);
-
+  gpio_export(dc);
+  gpio_set_dir(dc, true);
+  gpio_export(rst);
+  gpio_set_dir(rst, true);
+  // insert module
+  // system("/sbin/insmod spi-gpio-custom bus0=1,18,19,100,0,1000,22");
   
-  set_gpio(20, (char *)"1");
+  gpio_set_value(rst, 1);
   //digitalWrite(rst, HIGH);
   // VDD (3.3V) goes high at start, lets just chill for a ms
   usleep(1000);
   // bring0xset low
-  set_gpio(20, (char *)"0");
+  gpio_set_value(rst, 0);
   // digitalWrite(rst, LOW);
   // wait 10ms
   usleep(10000);
   // bring out of reset
-  set_gpio(20, (char *)"1");
+  gpio_set_value(rst, 1);
   // digitalWrite(rst, HIGH);
   // turn on VCC (9V?)
 
@@ -384,16 +385,6 @@ void SSD1306::invert(uint8_t i) {
   }
 }
 
-void SSD1306::set_gpio(int num, char* c) {
-  FILE *f;
-  char s[50];
-  sprintf(s, "/sys/class/gpio%d/value", num);
-  cout << s;
-  f = fopen(s, "w");
-  fprintf(f, c);
-  fclose(f);
-}
-
 void SSD1306::spiwrite(uint8_t c) {
   int spiDev = open(spi_name, O_RDWR);
   struct spi_ioc_transfer xfer;
@@ -420,7 +411,7 @@ inline void SSD1306::spiwrite(uint8_t c) {
 
 void SSD1306::ssd1306_command(uint8_t c) { 
   // digitalWrite(cs, HIGH);
-  set_gpio(24, (char *)"0");
+  gpio_set_value(dc, 0);
   // digitalWrite(dc, LOW);
   // digitalWrite(cs, LOW);
   spiwrite(c);
@@ -429,7 +420,7 @@ void SSD1306::ssd1306_command(uint8_t c) {
 
 void SSD1306::ssd1306_data(uint8_t c) {
   // digitalWrite(cs, HIGH);
-  set_gpio(24, (char *)"1");
+  gpio_set_value(dc, 1);
   // digitalWrite(dc, HIGH);
   // digitalWrite(cs, LOW);
   spiwrite(c);
