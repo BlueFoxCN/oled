@@ -6,38 +6,38 @@
 #define WHITE 1
 
 /*=========================================================================
-    SSD1306 Displays
-    -----------------------------------------------------------------------
-    The driver is used in multiple displays (128x64, 128x32, etc.).
-    Select the appropriate display below to create an appropriately
-    sized framebuffer, etc.
+		SSD1306 Displays
+		-----------------------------------------------------------------------
+		The driver is used in multiple displays (128x64, 128x32, etc.).
+		Select the appropriate display below to create an appropriately
+		sized framebuffer, etc.
 
-    SSD1306_128_64  128x64 pixel display
+		SSD1306_128_64  128x64 pixel display
 
-    SSD1306_128_32  128x32 pixel display
+		SSD1306_128_32  128x32 pixel display
 
-    You also need to set the LCDWIDTH and LCDHEIGHT defines to an 
-    appropriate size
+		You also need to set the LCDWIDTH and LCDHEIGHT defines to an 
+		appropriate size
 
-    -----------------------------------------------------------------------*/
+		-----------------------------------------------------------------------*/
 #define SSD1306_128_64
 //     #define SSD1306_128_32
 /*=========================================================================*/
 
 #if defined SSD1306_128_64 && defined SSD1306_128_32
-  #error "Only one SSD1306 display can be specified at once in SSD1306.h"
+	#error "Only one SSD1306 display can be specified at once in SSD1306.h"
 #endif
 #if !defined SSD1306_128_64 && !defined SSD1306_128_32
-  #error "At least one SSD1306 display must be specified in SSD1306.h"
+	#error "At least one SSD1306 display must be specified in SSD1306.h"
 #endif
 
 #if defined SSD1306_128_64
-  #define SSD1306_LCDWIDTH                  128
-  #define SSD1306_LCDHEIGHT                 64
+	#define SSD1306_LCDWIDTH                  128
+	#define SSD1306_LCDHEIGHT                 64
 #endif
 #if defined SSD1306_128_32
-  #define SSD1306_LCDWIDTH                  128
-  #define SSD1306_LCDHEIGHT                 32
+	#define SSD1306_LCDWIDTH                  128
+	#define SSD1306_LCDHEIGHT                 32
 #endif
 
 #define SSD1306_SETCONTRAST 0x81
@@ -77,39 +77,39 @@
 
 class SSD1306 {
  public:
-  SSD1306(int8_t DC, int8_t RST) :dc(DC), rst(RST) {}
+	SSD1306(int8_t DC, int8_t RST) :dc(DC), rst(RST) {}
 
 
-  void ssd1306_init(uint8_t switchvcc);
-  void ssd1306_command(uint8_t c);
-  void ssd1306_data(uint8_t c);
-  void ssd1306_set_brightness(uint8_t val);
-  void clear_display(void);
-  void clear();
-  void invert(uint8_t i);
-  void display();
+	void ssd1306_init(uint8_t switchvcc);
+	void ssd1306_command(uint8_t c);
+	void ssd1306_data(uint8_t c);
+	void ssd1306_set_brightness(uint8_t val);
+	void clear_display(void);
+	void clear();
+	void invert(uint8_t i);
+	void display();
 
-  void setpixel(uint8_t x, uint8_t y, uint8_t color);
-  void fillcircle(uint8_t x0, uint8_t y0, uint8_t r, 
-		  uint8_t color);
-  void drawcircle(uint8_t x0, uint8_t y0, uint8_t r, 
-		  uint8_t color);
-  void drawrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, 
+	void setpixel(uint8_t x, uint8_t y, uint8_t color);
+	void fillcircle(uint8_t x0, uint8_t y0, uint8_t r, 
+			uint8_t color);
+	void drawcircle(uint8_t x0, uint8_t y0, uint8_t r, 
+			uint8_t color);
+	void drawrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, 
 		uint8_t color);
-  void fillrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, 
+	void fillrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, 
 		uint8_t color);
-  void drawline(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, 
+	void drawline(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, 
 		uint8_t color);
-  void drawchar(uint8_t x, uint8_t line, uint8_t c);
-  void drawstring(uint8_t x, uint8_t line, char *c);
+	void drawchar(uint8_t x, uint8_t line, uint8_t c);
+	void drawstring(uint8_t x, uint8_t line, char *c);
 
-  void drawbitmap(uint8_t x, uint8_t y, 
-		  const uint8_t *bitmap, uint8_t w, uint8_t h,
-		  uint8_t color);
+	void drawbitmap(uint8_t x, uint8_t y, 
+			const uint8_t *bitmap, uint8_t w, uint8_t h,
+			uint8_t color);
 
  private:
-  int8_t dc, rst;
-  void spiwrite(uint8_t c);
+	int8_t dc, rst;
+	void spiwrite(uint8_t c);
 
-  //uint8_t buffer[128*64/8]; 
+	//uint8_t buffer[128*64/8]; 
 };
